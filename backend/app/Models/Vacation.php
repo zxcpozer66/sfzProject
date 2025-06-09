@@ -30,16 +30,16 @@ class Vacation extends Model
         return $this->belongsTo(VacationStatus::class, 'vacation_status_id');
     }
 
-    public function approver()
-    {
-        return $this->belongsTo(User::class, 'approved_by');
-    }
-
     public function getDaysUsedAttribute()
     {
         $start = Carbon::parse($this->start_date);
         $end = Carbon::parse($this->end_date);
 
         return $start->diffInWeekdays($end) + 1;
+    }
+
+    public function approvedByUser()
+    {
+        return $this->belongsTo(User::class, 'approved_by');
     }
 }

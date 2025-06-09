@@ -18,6 +18,6 @@ export interface RequestData {
 	notation_id?: number
 	notation?: Notation
 	type_reaction_id?: number
-	order_apllication?: string
+	order_application?: string
 	reaction_type: Reaction
 }

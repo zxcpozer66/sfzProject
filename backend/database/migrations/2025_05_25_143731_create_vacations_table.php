@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('vacations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('vacation_status_id')->constrained('vacations_status');
+            $table->foreignId('vacation_status_id')->constrained('vacation_statuses');
             $table->date('start_date');
             $table->date('end_date');
             $table->foreignId('approved_by')->nullable()->constrained('users')->nullOnDelete();

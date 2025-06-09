@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { UserTable } from "./../components/tables/users/UserTable"
 
-import { getUsersData2, editUser, deleteUser, getDepartments } from "./../api/"
+import { getUsersVacationInterval, editUser, deleteUser, getDepartments } from "./../api/"
 import { transformUserData } from "../utils/utils"
 import type { Department, UserData } from "../interfaces/types"
 
@@ -16,7 +16,7 @@ export function UsersPage() {
 			try {
 				setLoading(true)
 				const [usersRes, deptsRes] = await Promise.all([
-					getUsersData2(),
+					getUsersVacationInterval(),
 					getDepartments(),
 				])
 

@@ -35,7 +35,6 @@ export const CollapsibleTable: FC = () => {
 	const [modalOpen, setModalOpen] = useState(false)
 
 	const handleModal = () => setModalOpen(!modalOpen)
-
 	useEffect(() => {
 		const loadOptions = async () => {
 			const resNotation = await getNotation()
@@ -48,7 +47,6 @@ export const CollapsibleTable: FC = () => {
 			const res = await getDepartments()
 			setDepartments(res.data)
 		}
-
 		fetchDepartments()
 		loadOptions()
 	}, [])

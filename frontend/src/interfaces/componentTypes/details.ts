@@ -5,8 +5,8 @@ export interface Detail {
 	descriptionTask?: string
 	answer?: string
 	notation?: Notation | string
-	order_apllication?: string
-	startTime?: Date
-	endTime?: Date
+	order_application?: string
+	startTime?: Date | string
+	endTime?: Date | string
 	typeReaction: string
 }

@@ -9,6 +9,8 @@ class VacationStatus extends Model
 {
     use HasFactory;
 
+    protected $table = 'vacation_statuses';
+
     public function vacations()
     {
         return $this->hasMany(Vacation::class, 'vacation_status_id');

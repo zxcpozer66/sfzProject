@@ -25,6 +25,7 @@ export const editApplication = async (id:number, value: {}) => {
 }
 
 export const addApplication = async (formData: {user_id: number, description_problem: string, appeal_title: string}) => {
+  console.log(formData)
   const res = await apiClient.post('/', formData);
   return res.data; 
   }

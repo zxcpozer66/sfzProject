@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\DB;
+use App\Models\Vacation;
+use App\Models\Application;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -70,5 +72,68 @@ class UserController extends Controller
     {
         User::findOrFail($id)->delete();
         return response()->json(null, 204);
+    }
+
+     public function getVacationInterval(Request $request)
+    {
+        $validated = $request->validate([
+            'per_page' => 'nullable|integer',
+        ]);
+
+        $user = auth()->user();
+        $departmentId = $user->department_id;
+
+        $perPage = $validated['per_page'] ?? 10;
+
+        // ID статус одобрен
+        $approvedStatusId = 2;
+
+        $workMinutesSubquery = Application::query()
+            ->whereNotNull('start_time')
+            ->whereNotNull('end_time')
+            ->whereNull('deleted_at')
+            ->select(
+                'master_id as user_id',
+                DB::raw('SUM(TIMESTAMPDIFF(MINUTE, start_time, end_time)) as total_work_minutes')
+            )
+            ->groupBy('master_id');
+
+        //480 минут = число рабочих минут в день
+        $vacationMinutesSubquery = Vacation::query()
+            ->where('vacation_status_id', $approvedStatusId)
+            ->whereNull('deleted_at')
+            ->select(
+                'user_id',
+                DB::raw('SUM((DATEDIFF(end_date, start_date) + 1) * 480) as total_vacation_minutes')
+            )
+            ->groupBy('user_id');
+
+        $query = User::query()
+            ->select([
+                'users.id',
+                'users.username',
+                'users.name',
+                'users.surname',
+                'users.patronymic',
+                'users.department_id',
+                DB::raw('COALESCE(work.total_work_minutes, 0) as total_work_minutes'),
+                DB::raw('COALESCE(vacation.total_vacation_minutes, 0) as total_vacation_minutes'),
+                DB::raw('COALESCE(work.total_work_minutes, 0) - COALESCE(vacation.total_vacation_minutes, 0) as available_minutes')
+            ])
+            ->leftJoinSub($workMinutesSubquery, 'work', function ($join) {
+                $join->on('users.id', '=', 'work.user_id');
+            })
+            ->leftJoinSub($vacationMinutesSubquery, 'vacation', function ($join) {
+                $join->on('users.id', '=', 'vacation.user_id');
+            })
+            ->where('users.department_id', $departmentId)
+            ->with('department')
+            ->orderBy('users.id', 'desc');
+
+        $users = $query->paginate($perPage);
+
+        $users->appends($request->query());
+
+        return response()->json($users);
     }
 }

@@ -17,9 +17,9 @@ return new class extends Migration
             $table->string('appeal_title', 255);
             $table->dateTime('start_time')->nullable();
             $table->dateTime('end_time')->nullable();
-            $table->foreignId('type_reaction_id')->constrained('reactions_type');
+            $table->foreignId('type_reaction_id')->nullable()->constrained('reactions_type');
             $table->foreignId('notation_id')->nullable()->constrained();
-            $table->string('order_apllication', 255)->nullable();
+            $table->string('order_application', 255)->nullable();
             $table->text('description_problem')->nullable();
             $table->text('description_task')->nullable();
             $table->text('answer')->nullable();

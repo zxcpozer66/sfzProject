@@ -11,7 +11,7 @@ export const mapDetailToRequest: Record<DetailKeys, keyof RequestData> = {
 	answer: 'answer',
 	notation: 'notation_id',
 	typeReaction: 'type_reaction_id',
-	order_apllication: 'order_apllication',
+	order_application: 'order_application',
 }
 
 export const labelMap: Record<DetailKeys, string> = {
@@ -21,7 +21,7 @@ export const labelMap: Record<DetailKeys, string> = {
 	descriptionTask: 'Описание задачи специалистом',
 	answer: 'Решение задачи специалистом',
 	notation: 'Примечание',
-	order_apllication: 'Поручение',
+	order_application: 'Поручение',
 	typeReaction: 'Тип реакции',
 }
 
@@ -32,6 +32,6 @@ export const detailFields: DetailKeys[] = [
 	'descriptionTask',
 	'answer',
 	'notation',
-	'order_apllication',
+	'order_application',
 	'typeReaction',
 ]

@@ -27,7 +27,7 @@ class Application extends Model
         'end_time',
         'notation_id',
         'answer',
-        'order_apllication',
+        'order_application',
         'description_task',
     ];
 

@@ -16,3 +16,26 @@ export const addVacation = async (rangeDate: { startDate: Date; endDate: Date })
   });
   return res.data;
 };
+
+interface VacationParams {
+  status?: "pending" | "active" | "other";
+  page?: number;
+  per_page?: number;
+}
+
+export const getVacations = async (params: VacationParams) => {
+  const res = await axios.get(API_BASE_URL, { params });
+  return res.data;
+};
+
+export const getVacationStatuses = async () => {
+  const res = await axios.get(`${API_BASE_URL}/vacation-statuses`);
+  return res.data;
+};
+
+export const updateVacationStatus = async (vacationId: number, statusId: number) => {
+  const res = await axios.patch(`${API_BASE_URL}/${vacationId}`, {
+    vacation_status_id: statusId,
+  });
+  return res.data;
+};

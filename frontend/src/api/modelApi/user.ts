@@ -14,8 +14,6 @@ export const getUsers = () => {
 	return apiClient.get('/')
 }
 
-
-
 export const addUser = async (userData: {
 	surname: string
 	name: string
@@ -35,13 +33,6 @@ export const editUser = async (id: number, value: {}) => {
 	return res.data
 }
 
-const apiClient2 = axios.create({
-	baseURL: 'http://127.0.0.1:8000/api',
-	headers: {
-		'Content-Type': 'application/json',
-	},
-})
-
-export const getUsersData2 = () => {
-	return apiClient2.get('/vacations/get-users-and-available-vacation-minutes')
+export const getUsersVacationInterval = () => {
+	return apiClient.get('/vacation-interval')
 }
