@@ -1,0 +1,7 @@
+export interface User {
+	id: number
+	name?: string
+	surname?: string
+	patronymic?: string
+	department_id?: number
+}
