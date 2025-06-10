@@ -23,9 +23,9 @@ import {
 	getReactions,
 	getUsers,
 } from "../../../api";
+import type { RequestData } from "../../../interfaces/api/requestData";
 import type { User } from "../../../interfaces/modelsTypes/user";
 import type { Department } from "../../../interfaces/types";
-import type { RequestData } from "../../../interfaces/api/requestData";
 
 export const CollapsibleTable: FC = () => {
 	const [reactionOptions, setReactionOptions] = useState<any[]>([]);
