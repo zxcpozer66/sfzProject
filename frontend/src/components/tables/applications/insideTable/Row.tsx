@@ -34,11 +34,11 @@ export const Row: FC<IProps> = ({
 	userList,
 }) => {
 	const { formData, setFormData, editMode, setEditMode, handleSave } =
-	useRequestForm()
+		useRequestForm()
 	const [open, setOpen] = useState(false)
-	
+
 	const { id, data, department, user, master, appeal_title } = formData
-	
+
 	const [isDialogOpen, setIsDialogOpen] = useState(false)
 	const [deletingId, setDeletingId] = useState<number | null>(null)
 
@@ -126,10 +126,15 @@ export const Row: FC<IProps> = ({
 									variant='outlined'
 									size='small'
 									label='Сотрудник'
+									onClick={e => e.stopPropagation()}
+									onFocus={e => e.stopPropagation()}
+									onMouseDown={e => e.stopPropagation()}
 								/>
 							)}
 							sx={{ width: 250 }}
 							onClick={e => e.stopPropagation()}
+							onFocus={e => e.stopPropagation()}
+							onMouseDown={e => e.stopPropagation()}
 						/>
 					) : (
 						formatFullName(user)
@@ -144,20 +149,25 @@ export const Row: FC<IProps> = ({
 								`${option.surname} ${option.name} ${option.patronymic}`
 							}
 							isOptionEqualToValue={(option, value) => option.id === value.id}
-							value={userList.find(u => u.id === master?.id) || null}
+							value={userList.find(u => u.id === user?.id) || null}
 							onChange={(event, newValue) => {
-								handleInputChange('master', newValue || '')
+								handleInputChange('user', newValue || '')
 							}}
 							renderInput={params => (
 								<TextField
 									{...params}
 									variant='outlined'
 									size='small'
-									label='Мастер'
+									label='Сотрудник'
+									onClick={e => e.stopPropagation()}
+									onFocus={e => e.stopPropagation()}
+									onMouseDown={e => e.stopPropagation()}
 								/>
 							)}
 							sx={{ width: 250 }}
 							onClick={e => e.stopPropagation()}
+							onFocus={e => e.stopPropagation()}
+							onMouseDown={e => e.stopPropagation()}
 						/>
 					) : (
 						formatFullName(master)

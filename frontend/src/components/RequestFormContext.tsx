@@ -8,7 +8,7 @@ import {
 	type SetStateAction,
 } from 'react'
 import { editApplication } from '../api'
-import type { RequestData } from '../interfaces/api/response/request/requestData'
+import type { RequestData } from '../interfaces/api/requestData'
 
 interface RequestFormContextType {
 	formData: RequestData

@@ -1,4 +1,4 @@
-import type { RequestData } from '../api/response/request/requestData'
+import type { RequestData } from '../api/requestData'
 
 export interface RowProps {
 	row: RequestData
