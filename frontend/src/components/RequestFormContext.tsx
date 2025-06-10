@@ -6,30 +6,30 @@ import {
 	type FC,
 	type ReactNode,
 	type SetStateAction,
-} from 'react'
-import { editApplication } from '../api'
-import type { RequestData } from '../interfaces/api/response/request/requestData'
+} from "react";
+import { editApplication } from "../api";
+import type { RequestData } from "../interfaces/api/requestData";
 
 interface RequestFormContextType {
-	formData: RequestData
-	setFormData: Dispatch<SetStateAction<RequestData>>
-	editMode: boolean
-	setEditMode: Dispatch<SetStateAction<boolean>>
-	handleSave: () => void
+	formData: RequestData;
+	setFormData: Dispatch<SetStateAction<RequestData>>;
+	editMode: boolean;
+	setEditMode: Dispatch<SetStateAction<boolean>>;
+	handleSave: () => void;
 }
 const RequestFormContext = createContext<RequestFormContextType | undefined>(
-	undefined
-)
+	undefined,
+);
 
 export const RequestFormProvider: FC<{
-	children: ReactNode
-	initialData: RequestData
+	children: ReactNode;
+	initialData: RequestData;
 }> = ({ children, initialData }) => {
-	const [formData, setFormData] = useState<RequestData>(initialData)
-	const [editMode, setEditMode] = useState(false)
+	const [formData, setFormData] = useState<RequestData>(initialData);
+	const [editMode, setEditMode] = useState(false);
 	const handleSave = async () => {
-		setEditMode(false)
-		if (!formData) return
+		setEditMode(false);
+		if (!formData) return;
 
 		const payload = {
 			...formData,
@@ -40,14 +40,14 @@ export const RequestFormProvider: FC<{
 			department: undefined,
 			reaction_type: undefined,
 			notation: undefined,
-		}
+		};
 
 		try {
-			await editApplication(formData.id, payload)
+			await editApplication(formData.id, payload);
 		} catch (error) {
-			console.error('Ошибка при сохранении:', error)
+			console.error("Ошибка при сохранении:", error);
 		}
-	}
+	};
 
 	return (
 		<RequestFormContext.Provider
@@ -55,13 +55,13 @@ export const RequestFormProvider: FC<{
 		>
 			{children}
 		</RequestFormContext.Provider>
-	)
-}
+	);
+};
 
 export const useRequestForm = () => {
-	const context = useContext(RequestFormContext)
+	const context = useContext(RequestFormContext);
 	if (!context) {
-		throw new Error('useRequestForm must be used within a RequestFormProvider')
+		throw new Error("useRequestForm must be used within a RequestFormProvider");
 	}
-	return context
-}
+	return context;
+};

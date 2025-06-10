@@ -7,6 +7,7 @@ import {
 	TableCell,
 	TableContainer,
 	TableHead,
+	TablePagination,
 	TableRow,
 } from "@mui/material";
 import { useEffect, useState, type FC } from "react";
@@ -27,73 +28,47 @@ import type { Department } from "../../../interfaces/types";
 import type { RequestData } from "../../../interfaces/api/requestData";
 
 export const CollapsibleTable: FC = () => {
-<<<<<<< HEAD
-	const [reactionOptions, setReactionOptions] = useState<any[]>([])
-	const [notationOptions, setNotationOptions] = useState<any[]>([])
-	const [departments, setDepartments] = useState<Department[]>([])
-	const [applications, setApplications] = useState<RequestData[]>([])
-	const [userList, setUserList] = useState<User[]>([])
-	const [modalOpen, setModalOpen] = useState(false)
-
-	const handleModal = () => setModalOpen(!modalOpen)
-
-	useEffect(() => {
-		const loadOptions = async () => {
-			try {
-				const resNotation = await getNotation()
-				setNotationOptions(resNotation?.data ?? [])
-			} catch (error) {
-				console.error('Ошибка при загрузке Notation:', error)
-				setNotationOptions([])
-			}
-
-			try {
-				const resReaction = await getReactions()
-				setReactionOptions(resReaction?.data ?? [])
-			} catch (error) {
-				console.error('Ошибка при загрузке Reactions:', error)
-				setReactionOptions([])
-			}
-		}
-
-		const fetchDepartments = async () => {
-			try {
-				const res = await getDepartments()
-				setDepartments(res?.data ?? [])
-			} catch (error) {
-				console.error('Ошибка при загрузке Departments:', error)
-				setDepartments([])
-			}
-		}
-
-		loadOptions()
-		fetchDepartments()
-	}, [])
-=======
-	const [reactionOptions, setReactionOptions] = useState<any>([]);
-	const [notationOptions, setNotationOptions] = useState<any>([]);
+	const [reactionOptions, setReactionOptions] = useState<any[]>([]);
+	const [notationOptions, setNotationOptions] = useState<any[]>([]);
 	const [departments, setDepartments] = useState<Department[]>([]);
-	const [applications, setApplications] = useState<RequestData[]>();
+	const [applications, setApplications] = useState<RequestData[]>([]);
 	const [userList, setUserList] = useState<User[]>([]);
 	const [modalOpen, setModalOpen] = useState(false);
 
 	const handleModal = () => setModalOpen(!modalOpen);
+
 	useEffect(() => {
 		const loadOptions = async () => {
-			const resNotation = await getNotation();
-			setNotationOptions(resNotation.data);
-			const resReaction = await getReactions();
-			setReactionOptions(resReaction.data);
+			try {
+				const resNotation = await getNotation();
+				setNotationOptions(resNotation?.data ?? []);
+			} catch (error) {
+				console.error("Ошибка при загрузке Notation:", error);
+				setNotationOptions([]);
+			}
+
+			try {
+				const resReaction = await getReactions();
+				setReactionOptions(resReaction?.data ?? []);
+			} catch (error) {
+				console.error("Ошибка при загрузке Reactions:", error);
+				setReactionOptions([]);
+			}
 		};
 
 		const fetchDepartments = async () => {
-			const res = await getDepartments();
-			setDepartments(res.data);
+			try {
+				const res = await getDepartments();
+				setDepartments(res?.data ?? []);
+			} catch (error) {
+				console.error("Ошибка при загрузке Departments:", error);
+				setDepartments([]);
+			}
 		};
-		fetchDepartments();
+
 		loadOptions();
+		fetchDepartments();
 	}, []);
->>>>>>> 073680a (add seeder + fix userTable)
 
 	const titleCell = [
 		"Дата",
@@ -106,40 +81,36 @@ export const CollapsibleTable: FC = () => {
 
 	const fetchData = async () => {
 		try {
-<<<<<<< HEAD
-			const response = await getApplications()
-			setApplications(response?.data ?? [])
-		} catch (error) {
-			console.error('Ошибка при загрузке Applications:', error)
-			setApplications([])
-=======
 			const response = await getApplications();
-			setApplications(response.data);
+			setApplications(response?.data ?? []);
 		} catch (error) {
-			console.error(error);
->>>>>>> 073680a (add seeder + fix userTable)
+			console.error("Ошибка при загрузке Applications:", error);
+			setApplications([]);
 		}
 	};
 
 	useEffect(() => {
-<<<<<<< HEAD
-		fetchData()
-
-		getUsers()
-			.then(res => setUserList(res?.data ?? []))
-			.catch(err => {
-				console.error('Ошибка при загрузке Users:', err)
-				setUserList([])
-			})
-	}, [])
-=======
 		fetchData();
-		getUsers()
-			.then((res) => setUserList(res.data))
-			.catch((err) => console.error(err));
-	}, []);
->>>>>>> 073680a (add seeder + fix userTable)
 
+		getUsers()
+			.then((res) => setUserList(res?.data ?? []))
+			.catch((err) => {
+				console.error("Ошибка при загрузке Users:", err);
+				setUserList([]);
+			});
+	}, []);
+
+	const [page, setPage] = useState(0);
+	const [rowsPerPage, setRowsPerPage] = useState(5);
+
+	const handleChangePage = (_: unknown, newPage: number) => setPage(newPage);
+
+	const handleChangeRowsPerPage = (
+		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+	) => {
+		setRowsPerPage(parseInt(e.target.value, 10));
+		setPage(0);
+	};
 	return (
 		<>
 			<TableContainer component={Paper}>
@@ -149,11 +120,7 @@ export const CollapsibleTable: FC = () => {
 							{titleCell.map((title, index) => (
 								<TableCell
 									key={index}
-<<<<<<< HEAD
-									align={title === 'Обращение' ? 'left' : 'center'}
-=======
-									align={title == "Обращение" ? "left" : "center"}
->>>>>>> 073680a (add seeder + fix userTable)
+									align={title === "Обращение" ? "left" : "center"}
 									sx={{ fontSize: 16 }}
 								>
 									{title}
@@ -171,25 +138,22 @@ export const CollapsibleTable: FC = () => {
 						</TableRow>
 					</TableHead>
 					<TableBody>
-<<<<<<< HEAD
 						{applications.length > 0 ? (
-							applications.map(row => (
-=======
-						{applications &&
-							applications.map((row) => (
->>>>>>> 073680a (add seeder + fix userTable)
-								<RequestFormProvider key={row.id} initialData={row}>
-									<Row
-										refetchApplications={fetchData}
-										reactionOptions={reactionOptions}
-										notationOptions={notationOptions}
-										userList={userList}
-									/>
-								</RequestFormProvider>
-							))
+							applications
+								.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+								.map((row) => (
+									<RequestFormProvider key={row.id} initialData={row}>
+										<Row
+											refetchApplications={fetchData}
+											reactionOptions={reactionOptions}
+											notationOptions={notationOptions}
+											userList={userList}
+										/>
+									</RequestFormProvider>
+								))
 						) : (
 							<TableRow>
-								<TableCell colSpan={titleCell.length + 1} align='center'>
+								<TableCell colSpan={titleCell.length + 1} align="center">
 									Нет данных для отображения
 								</TableCell>
 							</TableRow>
@@ -197,7 +161,19 @@ export const CollapsibleTable: FC = () => {
 					</TableBody>
 				</Table>
 			</TableContainer>
-
+			<TablePagination
+				labelRowsPerPage="Количество записей:"
+				rowsPerPageOptions={[5, 10, 25]}
+				component="div"
+				count={applications.length}
+				rowsPerPage={rowsPerPage}
+				page={page}
+				onPageChange={handleChangePage}
+				onRowsPerPageChange={handleChangeRowsPerPage}
+				labelDisplayedRows={({ from, to, count }) =>
+					`${from}-${to} из ${count}`
+				}
+			/>
 			<AddRequestModal
 				open={modalOpen}
 				onClose={handleModal}
