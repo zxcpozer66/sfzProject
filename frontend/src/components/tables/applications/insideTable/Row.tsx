@@ -25,6 +25,7 @@ interface IProps {
 	reactionOptions: any
 	notationOptions: any
 	userList: User[]
+	masterList: User[]
 }
 
 export const Row: FC<IProps> = ({
@@ -32,6 +33,7 @@ export const Row: FC<IProps> = ({
 	reactionOptions,
 	notationOptions,
 	userList,
+	masterList,
 }) => {
 	const { formData, setFormData, editMode, setEditMode, handleSave } =
 		useRequestForm()
@@ -48,7 +50,6 @@ export const Row: FC<IProps> = ({
 			[field]: value,
 		}))
 	}
-
 	const formatFullName = (userData: any): string => {
 		if (!userData) return 'Не указан'
 
@@ -125,8 +126,9 @@ export const Row: FC<IProps> = ({
 									{...params}
 									variant='outlined'
 									size='small'
-									label='Сотрудник'
+									label='Пользователь'
 									onClick={e => e.stopPropagation()}
+									onDoubleClick={e => e.stopPropagation()}
 									onFocus={e => e.stopPropagation()}
 									onMouseDown={e => e.stopPropagation()}
 								/>
@@ -144,22 +146,23 @@ export const Row: FC<IProps> = ({
 				<TableCell align='center'>
 					{editMode ? (
 						<Autocomplete
-							options={userList}
+							options={masterList}
 							getOptionLabel={(option: User) =>
 								`${option.surname} ${option.name} ${option.patronymic}`
 							}
 							isOptionEqualToValue={(option, value) => option.id === value.id}
-							value={userList.find(u => u.id === user?.id) || null}
+							value={masterList.find(u => u.id === master?.id) || null}
 							onChange={(event, newValue) => {
-								handleInputChange('user', newValue || '')
+								handleInputChange('master', newValue || '')
 							}}
 							renderInput={params => (
 								<TextField
 									{...params}
 									variant='outlined'
 									size='small'
-									label='Сотрудник'
+									label='Мастер'
 									onClick={e => e.stopPropagation()}
+									onDoubleClick={e => e.stopPropagation()}
 									onFocus={e => e.stopPropagation()}
 									onMouseDown={e => e.stopPropagation()}
 								/>
@@ -180,6 +183,7 @@ export const Row: FC<IProps> = ({
 							value={appeal_title || ''}
 							onChange={e => handleInputChange('appeal_title', e.target.value)}
 							onClick={e => e.stopPropagation()}
+							onDoubleClick={e => e.stopPropagation()}
 							fullWidth
 							variant='outlined'
 							size='small'
@@ -227,7 +231,7 @@ export const Row: FC<IProps> = ({
 			</TableRow>
 
 			<TableRow>
-				<TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+				<TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={7}>
 					<Collapse in={open} timeout='auto' unmountOnExit>
 						<Box sx={{ margin: 1 }}>
 							<Typography variant='h6' gutterBottom component='div'>

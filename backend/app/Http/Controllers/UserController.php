@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use Faker\Core\Number;
 use Illuminate\Support\Facades\DB;
 use App\Models\Vacation;
 use App\Models\Application;
@@ -12,6 +14,23 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all();
+        return response()->json($users);
+    }
+
+    public function usersRole($id, Request $request)
+    {
+        if (!is_numeric($id) || $id <= 0) {
+            return response()->json(['error' => 'Неверная роль'], 400);
+        }
+
+        $include = filter_var($request->query('include'), FILTER_VALIDATE_BOOLEAN);
+
+        if ($include) {
+            $users = User::where('role_id', $id)->get();
+        } else {
+            $users = User::where('role_id', '!=', $id)->get();
+        }
+
         return response()->json($users);
     }
 
@@ -43,7 +62,7 @@ class UserController extends Controller
             'department_id' => 'integer',
         ]);
 
-        $data['role_id'] = 5;
+        $data['role_id'] = null;
         $user            = User::create($data);
 
         return response()->json([
@@ -74,7 +93,7 @@ class UserController extends Controller
         return response()->json(null, 204);
     }
 
-     public function getVacationInterval(Request $request)
+    public function getVacationInterval(Request $request)
     {
         $validated = $request->validate([
             'per_page' => 'nullable|integer',

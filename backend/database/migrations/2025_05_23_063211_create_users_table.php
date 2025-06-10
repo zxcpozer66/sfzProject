@@ -15,7 +15,7 @@ return new class extends Migration
         $table->string('name', 255)->nullable();
         $table->string('surname', 255)->nullable();
         $table->string('patronymic', 255)->nullable();
-        $table->foreignId('role_id')->constrained();
+        $table->foreignId('role_id')->nullable()->constrained();
         $table->unsignedBigInteger('department_id')->nullable(); 
         $table->timestamps();
         $table->softDeletes();

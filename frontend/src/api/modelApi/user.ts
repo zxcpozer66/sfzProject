@@ -14,6 +14,19 @@ export const getUsers = () => {
 	return apiClient.get('/')
 }
 
+export const getUsersRole = async (
+	roleId: number,
+	include = true
+): Promise<User[]> => {
+	const res = await apiClient.get(`/role/${roleId}`, {
+		params: { include },
+	})
+	return res.data
+}
+
+export const getCurrentUser = () => {
+	return apiClient.get('/current-user')
+}
 export const addUser = async (userData: {
 	surname: string
 	name: string

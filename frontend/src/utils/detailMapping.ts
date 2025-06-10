@@ -1,4 +1,4 @@
-import type { RequestData } from '../interfaces/api/response/request/requestData'
+import type { RequestData } from '../interfaces/api/requestData'
 import type { Detail } from '../interfaces/componentTypes/details'
 
 export type DetailKeys = keyof Detail

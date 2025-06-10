@@ -65,5 +65,6 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'windows.auth' => \App\Http\Middleware\WindowsAuth::class,
+        'role' => \App\Http\Middleware\RoleCheck::class,
     ];
 }

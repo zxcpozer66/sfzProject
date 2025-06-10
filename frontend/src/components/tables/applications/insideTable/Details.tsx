@@ -56,7 +56,7 @@ export const DetailTable: FC<DetailTableProps> = ({
 				[field]: currentTime,
 			}))
 
-			await editApplication(formData.id, { [field]: currentTime })
+			await editApplication(formData.id, { [field]: true })
 		} catch (error) {
 			console.error('Ошибка:', error)
 		}
@@ -74,7 +74,6 @@ export const DetailTable: FC<DetailTableProps> = ({
 										variant='outlined'
 										size='small'
 										color='primary'
-										disabled={!editMode}
 										onClick={() => handleTimeButtonClick('start_time')}
 									>
 										Начать работу
@@ -86,7 +85,7 @@ export const DetailTable: FC<DetailTableProps> = ({
 										variant='outlined'
 										size='small'
 										color='secondary'
-										disabled={!editMode || !detailData.startTime}
+										disabled={!detailData.startTime}
 										onClick={() => handleTimeButtonClick('end_time')}
 									>
 										Закончить работу
