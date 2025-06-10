@@ -43,7 +43,7 @@ class UserController extends Controller
             'department_id' => 'integer',
         ]);
 
-        $data['role_id'] = 5;
+        $data['role_id'] = null;
         $user            = User::create($data);
 
         return response()->json([
