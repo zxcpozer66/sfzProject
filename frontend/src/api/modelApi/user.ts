@@ -1,18 +1,19 @@
-import axios from 'axios'
-import type { User } from '../../interfaces/modelsTypes/user'
+import axios from "axios";
+import type { User } from "../../interfaces/modelsTypes/user";
+import { config } from "../../config";
 
-const API_BASE_URL = 'http://127.0.0.1:8000/api/users'
+const API_BASE_URL = `${config.apiUrl}api/users`;
 
 const apiClient = axios.create({
 	baseURL: API_BASE_URL,
 	headers: {
-		'Content-Type': 'application/json',
+		"Content-Type": "application/json",
 	},
-})
+});
 
 export const getUsers = () => {
-	return apiClient.get('/')
-}
+	return apiClient.get("/");
+};
 
 export const getUsersRole = async (
 	roleId: number,
@@ -28,24 +29,24 @@ export const getCurrentUser = () => {
 	return apiClient.get('/current-user')
 }
 export const addUser = async (userData: {
-	surname: string
-	name: string
-	patronymic: string
+	surname: string;
+	name: string;
+	patronymic: string;
 }): Promise<User> => {
-	const res = await apiClient.post('/', userData)
-	return res.data
-}
+	const res = await apiClient.post("/", userData);
+	return res.data;
+};
 
 export const deleteUser = async (id: number) => {
-	const res = await apiClient.delete(`/${id}`)
-	return res.data
-}
+	const res = await apiClient.delete(`/${id}`);
+	return res.data;
+};
 
 export const editUser = async (id: number, value: {}) => {
-	const res = await apiClient.put(`/${id}`, value)
-	return res.data
-}
+	const res = await apiClient.put(`/${id}`, value);
+	return res.data;
+};
 
 export const getUsersVacationInterval = () => {
-	return apiClient.get('/vacation-interval')
-}
+	return apiClient.get("/vacation-interval");
+};
