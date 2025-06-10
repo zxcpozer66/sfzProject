@@ -125,8 +125,9 @@ export const Row: FC<IProps> = ({
 									{...params}
 									variant="outlined"
 									size="small"
-									label="Сотрудник"
+									label="Пользователь"
 									onClick={(e) => e.stopPropagation()}
+									onDoubleClick={(e) => e.stopPropagation()}
 									onFocus={(e) => e.stopPropagation()}
 									onMouseDown={(e) => e.stopPropagation()}
 								/>
@@ -158,8 +159,9 @@ export const Row: FC<IProps> = ({
 									{...params}
 									variant="outlined"
 									size="small"
-									label="Сотрудник"
+									label="Мастер"
 									onClick={(e) => e.stopPropagation()}
+									onDoubleClick={(e) => e.stopPropagation()}
 									onFocus={(e) => e.stopPropagation()}
 									onMouseDown={(e) => e.stopPropagation()}
 								/>
@@ -182,6 +184,7 @@ export const Row: FC<IProps> = ({
 								handleInputChange("appeal_title", e.target.value)
 							}
 							onClick={(e) => e.stopPropagation()}
+							onDoubleClick={(e) => e.stopPropagation()}
 							fullWidth
 							variant="outlined"
 							size="small"
