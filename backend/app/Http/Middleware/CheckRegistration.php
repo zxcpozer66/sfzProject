@@ -2,12 +2,10 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
-class WindowsAuth
+class CheckRegistration
 {
     /**
      * Handle an incoming request.
@@ -18,17 +16,10 @@ class WindowsAuth
      */
     public function handle(Request $request, Closure $next)
     {
+        $user = $request->user();
 
-        // $remoteUser = $_SERVER['REMOTE_USER'] ?? null;
-        $remoteUser = $_SERVER['REMOTE_USER'] ?? 'DOMAIN\\admin';
-        
-        if ($remoteUser) {
-            $username = substr(strrchr($remoteUser, "\\"), 1);
-            $user = User::firstOrCreate(['username' => $username], ['role_id' => 3]);
-
-            Auth::login($user);
+        if (!empty($user->name) && !empty($user->surname) && !empty($user->patronymic)  && !empty($user->department_id)) {
+            return $next($request);
         }
-
-        return $next($request);
     }
 }

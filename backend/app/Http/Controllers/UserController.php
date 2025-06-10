@@ -8,6 +8,7 @@ use App\Models\Vacation;
 use App\Models\Application;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -155,4 +156,43 @@ class UserController extends Controller
 
         return response()->json($users);
     }
+
+  public function registration(Request $request)
+{
+    $currentUser = Auth::user();
+
+    $data = $request->validate([
+        'name' => 'required|string|max:255',
+        'surname' => 'required|string|max:255',
+        'patronymic' => 'required|string|max:255',
+        'department_id' => 'required|integer|exists:departments,id'
+    ]);
+
+    $existingUser = User::where('name', $data['name'])
+        ->where('surname', $data['surname'])
+        ->where('patronymic', $data['patronymic'])
+        ->where('department_id', $data['department_id'])
+        ->where('id', '!=', $currentUser->id)
+        ->first();
+
+    if ($existingUser) {
+        $existingUser->username = $currentUser->username;
+        $existingUser->role_id = $currentUser->role_id; 
+        $existingUser->save();
+
+        Auth::logout();
+
+        $currentUser->delete();
+
+        Auth::login($existingUser);
+
+        return response()->json($existingUser);
+    } else {
+        $currentUser->update($data);
+
+        return response()->json($currentUser);
+    }
+}
+
+
 }

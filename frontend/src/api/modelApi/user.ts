@@ -17,17 +17,17 @@ export const getUsers = () => {
 
 export const getUsersRole = async (
 	roleId: number,
-	include = true
+	include = true,
 ): Promise<User[]> => {
 	const res = await apiClient.get(`/role/${roleId}`, {
 		params: { include },
-	})
-	return res.data
-}
+	});
+	return res.data;
+};
 
 export const getCurrentUser = () => {
-	return apiClient.get('/current-user')
-}
+	return apiClient.get("/current-user");
+};
 export const addUser = async (userData: {
 	surname: string;
 	name: string;
@@ -49,4 +49,13 @@ export const editUser = async (id: number, value: {}) => {
 
 export const getUsersVacationInterval = () => {
 	return apiClient.get("/vacation-interval");
+};
+
+export const registration = (userData: {
+	surname: string;
+	name: string;
+	patronymic: string;
+	department_id: number;
+}) => {
+	return apiClient.patch("/registration", userData);
 };
