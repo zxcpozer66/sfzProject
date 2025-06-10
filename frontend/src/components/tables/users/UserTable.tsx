@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react"
+import React, { useState, useMemo } from "react";
 import {
 	Box,
 	Table,
@@ -15,18 +15,18 @@ import {
 	MenuItem,
 	Button,
 	Input,
-} from "@mui/material"
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever"
-import AlertDialog from "../../modals/AlertDialog"
-import type { Department, HeadCell, UserData } from "../../../interfaces/types"
-import { getComparator } from "../../../utils/utils"
+} from "@mui/material";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import AlertDialog from "../../modals/AlertDialog";
+import type { Department, HeadCell, UserData } from "../../../interfaces/types";
+import { getComparator } from "../../../utils/utils";
 
 interface UserTableProps {
-	users: UserData[]
-	departments: Department[]
-	onEdit: (id: number, data: Partial<UserData>) => Promise<void>
-	onDelete: (id: number) => Promise<void>
-	loading: boolean
+	users: UserData[];
+	departments: Department[];
+	onEdit: (id: number, data: Partial<UserData>) => Promise<void>;
+	onDelete: (id: number) => Promise<void>;
+	loading: boolean;
 }
 
 const headCells: readonly HeadCell[] = [
@@ -37,7 +37,7 @@ const headCells: readonly HeadCell[] = [
 	{ id: "department", align: "left", label: "Департамент" },
 	{ id: "total_work_minutes", align: "center", label: "Минут отработано" },
 	{ id: "available_minutes", align: "center", label: "Осталось минут" },
-]
+];
 
 export function UserTable({
 	users,
@@ -46,100 +46,100 @@ export function UserTable({
 	onDelete,
 	loading,
 }: UserTableProps) {
-	const [order, setOrder] = useState<"asc" | "desc">("asc")
-	const [orderBy, setOrderBy] = useState<keyof UserData>("surname")
-	const [page, setPage] = useState(0)
-	const [rowsPerPage, setRowsPerPage] = useState(5)
-	const [editingId, setEditingId] = useState<number | null>(null)
-	const [editData, setEditData] = useState<Partial<UserData> | null>(null)
-	const [isDialogOpen, setIsDialogOpen] = useState(false)
-	const [deletingId, setDeletingId] = useState<number | null>(null)
+	const [order, setOrder] = useState<"asc" | "desc">("asc");
+	const [orderBy, setOrderBy] = useState<keyof UserData>("id");
+	const [page, setPage] = useState(0);
+	const [rowsPerPage, setRowsPerPage] = useState(5);
+	const [editingId, setEditingId] = useState<number | null>(null);
+	const [editData, setEditData] = useState<Partial<UserData> | null>(null);
+	const [isDialogOpen, setIsDialogOpen] = useState(false);
+	const [deletingId, setDeletingId] = useState<number | null>(null);
 
 	const handleRowDoubleClick = (row: UserData) => {
 		if (editingId === row.id) {
-			cancelEditing()
-			return
+			cancelEditing();
+			return;
 		}
 		if (editingId !== null) {
-			cancelEditing()
+			cancelEditing();
 		}
-		setEditingId(row.id)
+		setEditingId(row.id);
 		setEditData({
 			name: row.name,
 			surname: row.surname,
 			patronymic: row.patronymic,
 			department_id: row.department_id,
-		})
-	}
+		});
+	};
 
 	const handleInputChange = (
 		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-		field: keyof UserData
+		field: keyof UserData,
 	) => {
-		if (!editData) return
-		setEditData({ ...editData, [field]: e.target.value })
-	}
+		if (!editData) return;
+		setEditData({ ...editData, [field]: e.target.value });
+	};
 
 	const handleDepartmentChange = (e: any) => {
-		if (!editData) return
-		setEditData({ ...editData, department_id: Number(e.target.value) })
-	}
+		if (!editData) return;
+		setEditData({ ...editData, department_id: Number(e.target.value) });
+	};
 
 	const handleSave = async () => {
-		if (editingId === null || !editData) return
-		await onEdit(editingId, editData)
-		cancelEditing()
-	}
+		if (editingId === null || !editData) return;
+		await onEdit(editingId, editData);
+		cancelEditing();
+	};
 
 	const cancelEditing = () => {
-		setEditingId(null)
-		setEditData(null)
-	}
+		setEditingId(null);
+		setEditData(null);
+	};
 
 	const handleDeleteClick = (e: React.MouseEvent, id: number) => {
-		e.stopPropagation()
-		setDeletingId(id)
-		setIsDialogOpen(true)
-	}
+		e.stopPropagation();
+		setDeletingId(id);
+		setIsDialogOpen(true);
+	};
 
 	const handleConfirmDelete = async () => {
-		if (deletingId === null) return
-		await onDelete(deletingId)
-		setIsDialogOpen(false)
-		setDeletingId(null)
-		if (editingId === deletingId) cancelEditing()
-	}
+		if (deletingId === null) return;
+		await onDelete(deletingId);
+		setIsDialogOpen(false);
+		setDeletingId(null);
+		if (editingId === deletingId) cancelEditing();
+	};
 
 	const handleCancelDelete = () => {
-		setIsDialogOpen(false)
-		setDeletingId(null)
-	}
+		setIsDialogOpen(false);
+		setDeletingId(null);
+	};
 
 	const handleRequestSort = (
 		_: React.MouseEvent<unknown>,
-		property: keyof UserData
+		property: keyof UserData,
 	) => {
-		const isAsc = orderBy === property && order === "asc"
-		setOrder(isAsc ? "desc" : "asc")
-		setOrderBy(property)
-	}
+		const isAsc = orderBy === property && order === "asc";
+		setOrder(isAsc ? "desc" : "asc");
+		setOrderBy(property);
+	};
 
-	const handleChangePage = (_: unknown, newPage: number) => setPage(newPage)
+	const handleChangePage = (_: unknown, newPage: number) => setPage(newPage);
 
 	const handleChangeRowsPerPage = (
-		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
 	) => {
-		setRowsPerPage(parseInt(e.target.value, 10))
-		setPage(0)
-	}
+		setRowsPerPage(parseInt(e.target.value, 10));
+		setPage(0);
+	};
 
 	const visibleRows = useMemo(
 		() =>
 			[...users]
 				.sort(getComparator(order, orderBy))
 				.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
-		[order, orderBy, page, rowsPerPage, users]
-	)
+		[order, orderBy, page, rowsPerPage, users],
+	);
 
 	return (
 		<Box sx={{ width: "100%" }}>
@@ -152,25 +152,12 @@ export function UserTable({
 									<TableCell
 										key={headCell.id}
 										align={headCell.align}
-										sortDirection={
-											orderBy === headCell.id
-												? order
-												: false
-										}
+										sortDirection={orderBy === headCell.id ? order : false}
 									>
 										<TableSortLabel
 											active={orderBy === headCell.id}
-											direction={
-												orderBy === headCell.id
-													? order
-													: "asc"
-											}
-											onClick={(e) =>
-												handleRequestSort(
-													e,
-													headCell.id
-												)
-											}
+											direction={orderBy === headCell.id ? order : "asc"}
+											onClick={(e) => handleRequestSort(e, headCell.id)}
 										>
 											{headCell.label}
 										</TableSortLabel>
@@ -181,23 +168,17 @@ export function UserTable({
 						</TableHead>
 						<TableBody>
 							{visibleRows.map((row) => {
-								const isEditing = editingId === row.id
+								const isEditing = editingId === row.id;
 								return (
 									<TableRow
 										hover
 										tabIndex={-1}
 										key={row.id}
-										onDoubleClick={() =>
-											handleRowDoubleClick(row)
-										}
+										onDoubleClick={() => handleRowDoubleClick(row)}
 										sx={{
-											backgroundColor: isEditing
-												? "#f0f7ff"
-												: "inherit",
+											backgroundColor: isEditing ? "#f0f7ff" : "inherit",
 											"&:hover": {
-												backgroundColor: isEditing
-													? "#e3f2fd"
-													: "#f5f5f5",
+												backgroundColor: isEditing ? "#e3f2fd" : "#f5f5f5",
 											},
 										}}
 									>
@@ -208,12 +189,7 @@ export function UserTable({
 											{isEditing ? (
 												<Input
 													value={editData?.name || ""}
-													onChange={(e) =>
-														handleInputChange(
-															e,
-															"name"
-														)
-													}
+													onChange={(e) => handleInputChange(e, "name")}
 													fullWidth
 													autoFocus
 												/>
@@ -224,15 +200,8 @@ export function UserTable({
 										<TableCell align="left">
 											{isEditing ? (
 												<Input
-													value={
-														editData?.surname || ""
-													}
-													onChange={(e) =>
-														handleInputChange(
-															e,
-															"surname"
-														)
-													}
+													value={editData?.surname || ""}
+													onChange={(e) => handleInputChange(e, "surname")}
 													fullWidth
 												/>
 											) : (
@@ -242,16 +211,8 @@ export function UserTable({
 										<TableCell align="left">
 											{isEditing ? (
 												<Input
-													value={
-														editData?.patronymic ||
-														""
-													}
-													onChange={(e) =>
-														handleInputChange(
-															e,
-															"patronymic"
-														)
-													}
+													value={editData?.patronymic || ""}
+													onChange={(e) => handleInputChange(e, "patronymic")}
 													fullWidth
 												/>
 											) : (
@@ -261,21 +222,13 @@ export function UserTable({
 										<TableCell align="left">
 											{isEditing ? (
 												<Select
-													value={
-														editData?.department_id ||
-														0
-													}
-													onChange={
-														handleDepartmentChange
-													}
+													value={editData?.department_id || 0}
+													onChange={handleDepartmentChange}
 													fullWidth
 													variant="outlined"
 												>
 													{departments.map((dept) => (
-														<MenuItem
-															key={dept.id}
-															value={dept.id}
-														>
+														<MenuItem key={dept.id} value={dept.id}>
 															{dept.title}
 														</MenuItem>
 													))}
@@ -303,12 +256,7 @@ export function UserTable({
 											) : (
 												<IconButton
 													color="error"
-													onClick={(e) =>
-														handleDeleteClick(
-															e,
-															row.id
-														)
-													}
+													onClick={(e) => handleDeleteClick(e, row.id)}
 													disabled={loading}
 												>
 													<DeleteForeverIcon />
@@ -316,7 +264,7 @@ export function UserTable({
 											)}
 										</TableCell>
 									</TableRow>
-								)
+								);
 							})}
 						</TableBody>
 					</Table>
@@ -342,5 +290,5 @@ export function UserTable({
 				textMessage="Вы уверены, что хотите удалить пользователя?"
 			/>
 		</Box>
-	)
+	);
 }

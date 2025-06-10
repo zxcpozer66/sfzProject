@@ -1,4 +1,4 @@
-import AddIcon from '@mui/icons-material/Add'
+import AddIcon from "@mui/icons-material/Add";
 import {
 	Button,
 	Paper,
@@ -8,25 +8,26 @@ import {
 	TableContainer,
 	TableHead,
 	TableRow,
-} from '@mui/material'
-import { useEffect, useState, type FC } from 'react'
-import { AddRequestModal } from '../../modals/AddRequestModal'
-import { RequestFormProvider } from '../../RequestFormContext'
-import { Row } from './insideTable/Row'
+} from "@mui/material";
+import { useEffect, useState, type FC } from "react";
+import { AddRequestModal } from "../../modals/AddRequestModal";
+import { RequestFormProvider } from "../../RequestFormContext";
+import { Row } from "./insideTable/Row";
 
-import { getApplications } from '../../../api/modelApi/application'
+import { getApplications } from "../../../api/modelApi/application";
 
 import {
 	getDepartments,
 	getNotation,
 	getReactions,
 	getUsers,
-} from '../../../api'
-import type { RequestData } from '../../../interfaces/api/response/request/requestData'
-import type { User } from '../../../interfaces/modelsTypes/user'
-import type { Department } from '../../../interfaces/types'
+} from "../../../api";
+import type { User } from "../../../interfaces/modelsTypes/user";
+import type { Department } from "../../../interfaces/types";
+import type { RequestData } from "../../../interfaces/api/requestData";
 
 export const CollapsibleTable: FC = () => {
+<<<<<<< HEAD
 	const [reactionOptions, setReactionOptions] = useState<any[]>([])
 	const [notationOptions, setNotationOptions] = useState<any[]>([])
 	const [departments, setDepartments] = useState<Department[]>([])
@@ -68,27 +69,60 @@ export const CollapsibleTable: FC = () => {
 		loadOptions()
 		fetchDepartments()
 	}, [])
+=======
+	const [reactionOptions, setReactionOptions] = useState<any>([]);
+	const [notationOptions, setNotationOptions] = useState<any>([]);
+	const [departments, setDepartments] = useState<Department[]>([]);
+	const [applications, setApplications] = useState<RequestData[]>();
+	const [userList, setUserList] = useState<User[]>([]);
+	const [modalOpen, setModalOpen] = useState(false);
+
+	const handleModal = () => setModalOpen(!modalOpen);
+	useEffect(() => {
+		const loadOptions = async () => {
+			const resNotation = await getNotation();
+			setNotationOptions(resNotation.data);
+			const resReaction = await getReactions();
+			setReactionOptions(resReaction.data);
+		};
+
+		const fetchDepartments = async () => {
+			const res = await getDepartments();
+			setDepartments(res.data);
+		};
+		fetchDepartments();
+		loadOptions();
+	}, []);
+>>>>>>> 073680a (add seeder + fix userTable)
 
 	const titleCell = [
-		'Дата',
-		'Отдел',
-		'Пользователь',
-		'Мастер',
-		'Обращение',
-		'Время',
-	]
+		"Дата",
+		"Отдел",
+		"Пользователь",
+		"Мастер",
+		"Обращение",
+		"Время",
+	];
 
 	const fetchData = async () => {
 		try {
+<<<<<<< HEAD
 			const response = await getApplications()
 			setApplications(response?.data ?? [])
 		} catch (error) {
 			console.error('Ошибка при загрузке Applications:', error)
 			setApplications([])
+=======
+			const response = await getApplications();
+			setApplications(response.data);
+		} catch (error) {
+			console.error(error);
+>>>>>>> 073680a (add seeder + fix userTable)
 		}
-	}
+	};
 
 	useEffect(() => {
+<<<<<<< HEAD
 		fetchData()
 
 		getUsers()
@@ -98,25 +132,36 @@ export const CollapsibleTable: FC = () => {
 				setUserList([])
 			})
 	}, [])
+=======
+		fetchData();
+		getUsers()
+			.then((res) => setUserList(res.data))
+			.catch((err) => console.error(err));
+	}, []);
+>>>>>>> 073680a (add seeder + fix userTable)
 
 	return (
 		<>
 			<TableContainer component={Paper}>
-				<Table aria-label='collapsible table'>
+				<Table aria-label="collapsible table">
 					<TableHead>
 						<TableRow>
 							{titleCell.map((title, index) => (
 								<TableCell
 									key={index}
+<<<<<<< HEAD
 									align={title === 'Обращение' ? 'left' : 'center'}
+=======
+									align={title == "Обращение" ? "left" : "center"}
+>>>>>>> 073680a (add seeder + fix userTable)
 									sx={{ fontSize: 16 }}
 								>
 									{title}
 								</TableCell>
 							))}
-							<TableCell align='center'>
+							<TableCell align="center">
 								<Button
-									variant='contained'
+									variant="contained"
 									endIcon={<AddIcon />}
 									onClick={handleModal}
 								>
@@ -126,8 +171,13 @@ export const CollapsibleTable: FC = () => {
 						</TableRow>
 					</TableHead>
 					<TableBody>
+<<<<<<< HEAD
 						{applications.length > 0 ? (
 							applications.map(row => (
+=======
+						{applications &&
+							applications.map((row) => (
+>>>>>>> 073680a (add seeder + fix userTable)
 								<RequestFormProvider key={row.id} initialData={row}>
 									<Row
 										refetchApplications={fetchData}
@@ -156,5 +206,5 @@ export const CollapsibleTable: FC = () => {
 				departments={departments}
 			/>
 		</>
-	)
-}
+	);
+};

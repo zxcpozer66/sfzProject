@@ -1,8 +1,8 @@
-import type { Notation } from '../../../modelsTypes/notation'
-import type { Reaction } from '../../../modelsTypes/reaction'
-import type { User } from '../../../modelsTypes/user'
-import type { Department } from '../../../types'
-import type { RequestData } from './requestData'
+import type { Notation } from "../modelsTypes/notation";
+import type { Reaction } from "../modelsTypes/reaction";
+import type { User } from "../modelsTypes/user";
+import type { Department } from "../types";
+import type { RequestData } from "./requestData";
 
 export function createData(
 	id: number,
@@ -15,7 +15,7 @@ export function createData(
 	notation: Notation,
 	start_time: Date,
 	reaction_type: Reaction,
-	end_time: Date
+	end_time: Date,
 ): RequestData {
 	return {
 		id,
@@ -29,5 +29,5 @@ export function createData(
 		start_time,
 		reaction_type,
 		end_time,
-	}
+	};
 }
