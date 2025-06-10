@@ -1,15 +1,19 @@
-import { useState, useEffect } from "react"
-import { UserTable } from "./../components/tables/users/UserTable"
+import { useEffect, useState } from 'react'
+import { UserTable } from './../components/tables/users/UserTable'
 
-import { getUsersVacationInterval, editUser, deleteUser, getDepartments } from "./../api/"
-import { transformUserData } from "../utils/utils"
-import type { Department, UserData } from "../interfaces/types"
+import type { Department, UserData } from '../interfaces/types'
+import { transformUserData } from '../utils/utils'
+import {
+	deleteUser,
+	editUser,
+	getDepartments,
+	getUsersVacationInterval,
+} from './../api/'
 
 export function UsersPage() {
 	const [users, setUsers] = useState<UserData[]>([])
 	const [departments, setDepartments] = useState<Department[]>([])
 	const [loading, setLoading] = useState(true)
-
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -24,7 +28,7 @@ export function UsersPage() {
 				setUsers(transformUserData(userDataArray))
 				setDepartments(deptsRes.data || [])
 			} catch (error) {
-				console.error("Ошибка загрузки данных:", error)
+				console.error('Ошибка загрузки данных:', error)
 			} finally {
 				setLoading(false)
 			}
@@ -44,21 +48,20 @@ export function UsersPage() {
 			})
 
 			setUsers(
-				users.map((u) =>
+				users.map(u =>
 					u.id === id
 						? {
 								...u,
 								...data,
 								department:
-									departments.find(
-										(d) => d.id === data.department_id
-									)?.title || u.department,
+									departments.find(d => d.id === data.department_id)?.title ||
+									u.department,
 						  }
 						: u
 				)
 			)
 		} catch (error) {
-			console.error("Ошибка сохранения:", error)
+			console.error('Ошибка сохранения:', error)
 		} finally {
 			setLoading(false)
 		}
@@ -68,9 +71,9 @@ export function UsersPage() {
 		try {
 			setLoading(true)
 			await deleteUser(id)
-			setUsers(users.filter((u) => u.id !== id))
+			setUsers(users.filter(u => u.id !== id))
 		} catch (error) {
-			console.error("Ошибка удаления:", error)
+			console.error('Ошибка удаления:', error)
 		} finally {
 			setLoading(false)
 		}
@@ -83,7 +86,7 @@ export function UsersPage() {
 				departments={departments}
 				onEdit={handleEdit}
 				onDelete={handleDelete}
-				loading={loading}
+				isLoading={loading}
 			/>
 		</div>
 	)

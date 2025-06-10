@@ -25,7 +25,7 @@ Route::middleware(['windows.auth'])->group(function () {
   });
 
 
-  Route::get('/users', [UserController::class, 'index']);
+  Route::get('/users', action: [UserController::class, 'index']);
   Route::get('/users/role/{id}', [UserController::class, 'usersRole']);
   Route::get('/users/vacation-interval', [UserController::class, 'getVacationInterval']);
 

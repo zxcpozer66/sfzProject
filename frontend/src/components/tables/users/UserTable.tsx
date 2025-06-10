@@ -1,6 +1,12 @@
-import React, { useState, useMemo } from "react";
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import {
 	Box,
+	Button,
+	IconButton,
+	Input,
+	MenuItem,
+	Paper,
+	Select,
 	Table,
 	TableBody,
 	TableCell,
@@ -9,146 +15,140 @@ import {
 	TablePagination,
 	TableRow,
 	TableSortLabel,
-	Paper,
-	IconButton,
-	Select,
-	MenuItem,
-	Button,
-	Input,
-} from "@mui/material";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import AlertDialog from "../../modals/AlertDialog";
-import type { Department, HeadCell, UserData } from "../../../interfaces/types";
-import { getComparator } from "../../../utils/utils";
+} from '@mui/material'
+import React, { useMemo, useState } from 'react'
+import type { Department, HeadCell, UserData } from '../../../interfaces/types'
+import { getComparator } from '../../../utils/utils'
+import AlertDialog from '../../modals/AlertDialog'
 
 interface UserTableProps {
-	users: UserData[];
-	departments: Department[];
-	onEdit: (id: number, data: Partial<UserData>) => Promise<void>;
-	onDelete: (id: number) => Promise<void>;
-	loading: boolean;
+	users: UserData[]
+	departments: Department[]
+	onEdit: (id: number, data: Partial<UserData>) => Promise<void>
+	onDelete: (id: number) => Promise<void>
+	isLoading: boolean
 }
 
 const headCells: readonly HeadCell[] = [
-	{ id: "username", align: "left", label: "Username" },
-	{ id: "name", align: "left", label: "Имя" },
-	{ id: "surname", align: "left", label: "Фамилия" },
-	{ id: "patronymic", align: "left", label: "Отчество" },
-	{ id: "department", align: "left", label: "Департамент" },
-	{ id: "total_work_minutes", align: "center", label: "Минут отработано" },
-	{ id: "available_minutes", align: "center", label: "Осталось минут" },
-];
+	{ id: 'username', align: 'left', label: 'Username' },
+	{ id: 'name', align: 'left', label: 'Имя' },
+	{ id: 'surname', align: 'left', label: 'Фамилия' },
+	{ id: 'patronymic', align: 'left', label: 'Отчество' },
+	{ id: 'department', align: 'left', label: 'Департамент' },
+	{ id: 'total_work_minutes', align: 'center', label: 'Минут отработано' },
+	{ id: 'available_minutes', align: 'center', label: 'Осталось минут' },
+]
 
 export function UserTable({
 	users,
 	departments,
 	onEdit,
 	onDelete,
-	loading,
+	isLoading,
 }: UserTableProps) {
-	const [order, setOrder] = useState<"asc" | "desc">("asc");
-	const [orderBy, setOrderBy] = useState<keyof UserData>("id");
-	const [page, setPage] = useState(0);
-	const [rowsPerPage, setRowsPerPage] = useState(5);
-	const [editingId, setEditingId] = useState<number | null>(null);
-	const [editData, setEditData] = useState<Partial<UserData> | null>(null);
-	const [isDialogOpen, setIsDialogOpen] = useState(false);
-	const [deletingId, setDeletingId] = useState<number | null>(null);
+	const [order, setOrder] = useState<'asc' | 'desc'>('asc')
+	const [orderBy, setOrderBy] = useState<keyof UserData>('id')
+	const [page, setPage] = useState(0)
+	const [rowsPerPage, setRowsPerPage] = useState(5)
+	const [editingId, setEditingId] = useState<number | null>(null)
+	const [editData, setEditData] = useState<Partial<UserData> | null>(null)
+	const [isDialogOpen, setIsDialogOpen] = useState(false)
+	const [deletingId, setDeletingId] = useState<number | null>(null)
 
 	const handleRowDoubleClick = (row: UserData) => {
 		if (editingId === row.id) {
-			cancelEditing();
-			return;
+			cancelEditing()
+			return
 		}
 		if (editingId !== null) {
-			cancelEditing();
+			cancelEditing()
 		}
-		setEditingId(row.id);
+		setEditingId(row.id)
 		setEditData({
 			name: row.name,
 			surname: row.surname,
 			patronymic: row.patronymic,
 			department_id: row.department_id,
-		});
-	};
+		})
+	}
 
 	const handleInputChange = (
 		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-		field: keyof UserData,
+		field: keyof UserData
 	) => {
-		if (!editData) return;
-		setEditData({ ...editData, [field]: e.target.value });
-	};
+		if (!editData) return
+		setEditData({ ...editData, [field]: e.target.value })
+	}
 
 	const handleDepartmentChange = (e: any) => {
-		if (!editData) return;
-		setEditData({ ...editData, department_id: Number(e.target.value) });
-	};
+		if (!editData) return
+		setEditData({ ...editData, department_id: Number(e.target.value) })
+	}
 
 	const handleSave = async () => {
-		if (editingId === null || !editData) return;
-		await onEdit(editingId, editData);
-		cancelEditing();
-	};
+		if (editingId === null || !editData) return
+		await onEdit(editingId, editData)
+		cancelEditing()
+	}
 
 	const cancelEditing = () => {
-		setEditingId(null);
-		setEditData(null);
-	};
+		setEditingId(null)
+		setEditData(null)
+	}
 
 	const handleDeleteClick = (e: React.MouseEvent, id: number) => {
-		e.stopPropagation();
-		setDeletingId(id);
-		setIsDialogOpen(true);
-	};
+		e.stopPropagation()
+		setDeletingId(id)
+		setIsDialogOpen(true)
+	}
 
 	const handleConfirmDelete = async () => {
-		if (deletingId === null) return;
-		await onDelete(deletingId);
-		setIsDialogOpen(false);
-		setDeletingId(null);
-		if (editingId === deletingId) cancelEditing();
-	};
+		if (deletingId === null) return
+		await onDelete(deletingId)
+		setIsDialogOpen(false)
+		setDeletingId(null)
+		if (editingId === deletingId) cancelEditing()
+	}
 
 	const handleCancelDelete = () => {
-		setIsDialogOpen(false);
-		setDeletingId(null);
-	};
+		setIsDialogOpen(false)
+		setDeletingId(null)
+	}
 
 	const handleRequestSort = (
 		_: React.MouseEvent<unknown>,
-		property: keyof UserData,
+		property: keyof UserData
 	) => {
-		const isAsc = orderBy === property && order === "asc";
-		setOrder(isAsc ? "desc" : "asc");
-		setOrderBy(property);
-	};
+		const isAsc = orderBy === property && order === 'asc'
+		setOrder(isAsc ? 'desc' : 'asc')
+		setOrderBy(property)
+	}
 
-	const handleChangePage = (_: unknown, newPage: number) => setPage(newPage);
+	const handleChangePage = (_: unknown, newPage: number) => setPage(newPage)
 
 	const handleChangeRowsPerPage = (
-		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
 	) => {
-		setRowsPerPage(parseInt(e.target.value, 10));
-		setPage(0);
-	};
+		setRowsPerPage(parseInt(e.target.value, 10))
+		setPage(0)
+	}
 
 	const visibleRows = useMemo(
 		() =>
 			[...users]
 				.sort(getComparator(order, orderBy))
 				.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
-		[order, orderBy, page, rowsPerPage, users],
-	);
+		[order, orderBy, page, rowsPerPage, users]
+	)
 
 	return (
-		<Box sx={{ width: "100%" }}>
-			<Paper sx={{ width: "100%", mb: 2 }}>
+		<Box sx={{ width: '100%' }}>
+			<Paper sx={{ width: '100%', mb: 2 }}>
 				<TableContainer>
-					<Table size="medium">
+					<Table size='medium'>
 						<TableHead>
 							<TableRow>
-								{headCells.map((headCell) => (
+								{headCells.map(headCell => (
 									<TableCell
 										key={headCell.id}
 										align={headCell.align}
@@ -156,19 +156,19 @@ export function UserTable({
 									>
 										<TableSortLabel
 											active={orderBy === headCell.id}
-											direction={orderBy === headCell.id ? order : "asc"}
-											onClick={(e) => handleRequestSort(e, headCell.id)}
+											direction={orderBy === headCell.id ? order : 'asc'}
+											onClick={e => handleRequestSort(e, headCell.id)}
 										>
 											{headCell.label}
 										</TableSortLabel>
 									</TableCell>
 								))}
-								<TableCell align="center">Действия</TableCell>
+								<TableCell align='center'>Действия</TableCell>
 							</TableRow>
 						</TableHead>
 						<TableBody>
-							{visibleRows.map((row) => {
-								const isEditing = editingId === row.id;
+							{visibleRows.map(row => {
+								const isEditing = editingId === row.id
 								return (
 									<TableRow
 										hover
@@ -176,20 +176,20 @@ export function UserTable({
 										key={row.id}
 										onDoubleClick={() => handleRowDoubleClick(row)}
 										sx={{
-											backgroundColor: isEditing ? "#f0f7ff" : "inherit",
-											"&:hover": {
-												backgroundColor: isEditing ? "#e3f2fd" : "#f5f5f5",
+											backgroundColor: isEditing ? '#f0f7ff' : 'inherit',
+											'&:hover': {
+												backgroundColor: isEditing ? '#e3f2fd' : '#f5f5f5',
 											},
 										}}
 									>
-										<TableCell component="th" scope="row">
+										<TableCell component='th' scope='row'>
 											{row.username}
 										</TableCell>
-										<TableCell align="left">
+										<TableCell align='left'>
 											{isEditing ? (
 												<Input
-													value={editData?.name || ""}
-													onChange={(e) => handleInputChange(e, "name")}
+													value={editData?.name || ''}
+													onChange={e => handleInputChange(e, 'name')}
 													fullWidth
 													autoFocus
 												/>
@@ -197,37 +197,37 @@ export function UserTable({
 												row.name
 											)}
 										</TableCell>
-										<TableCell align="left">
+										<TableCell align='left'>
 											{isEditing ? (
 												<Input
-													value={editData?.surname || ""}
-													onChange={(e) => handleInputChange(e, "surname")}
+													value={editData?.surname || ''}
+													onChange={e => handleInputChange(e, 'surname')}
 													fullWidth
 												/>
 											) : (
 												row.surname
 											)}
 										</TableCell>
-										<TableCell align="left">
+										<TableCell align='left'>
 											{isEditing ? (
 												<Input
-													value={editData?.patronymic || ""}
-													onChange={(e) => handleInputChange(e, "patronymic")}
+													value={editData?.patronymic || ''}
+													onChange={e => handleInputChange(e, 'patronymic')}
 													fullWidth
 												/>
 											) : (
-												row.patronymic || "н/д"
+												row.patronymic || 'н/д'
 											)}
 										</TableCell>
-										<TableCell align="left">
+										<TableCell align='left'>
 											{isEditing ? (
 												<Select
 													value={editData?.department_id || 0}
 													onChange={handleDepartmentChange}
 													fullWidth
-													variant="outlined"
+													variant='outlined'
 												>
-													{departments.map((dept) => (
+													{departments.map(dept => (
 														<MenuItem key={dept.id} value={dept.id}>
 															{dept.title}
 														</MenuItem>
@@ -237,42 +237,42 @@ export function UserTable({
 												row.department
 											)}
 										</TableCell>
-										<TableCell align="center">
+										<TableCell align='center'>
 											{row.total_work_minutes}
 										</TableCell>
-										<TableCell align="center">
+										<TableCell align='center'>
 											{row.available_minutes}
 										</TableCell>
-										<TableCell align="center">
+										<TableCell align='center'>
 											{isEditing ? (
 												<Button
-													color="primary"
-													variant="outlined"
+													color='primary'
+													variant='outlined'
 													onClick={handleSave}
-													size="small"
+													size='small'
 												>
 													Сохранить
 												</Button>
 											) : (
 												<IconButton
-													color="error"
-													onClick={(e) => handleDeleteClick(e, row.id)}
-													disabled={loading}
+													color='error'
+													onClick={e => handleDeleteClick(e, row.id)}
+													disabled={isLoading}
 												>
 													<DeleteForeverIcon />
 												</IconButton>
 											)}
 										</TableCell>
 									</TableRow>
-								);
+								)
 							})}
 						</TableBody>
 					</Table>
 				</TableContainer>
 				<TablePagination
-					labelRowsPerPage="Количество записей:"
+					labelRowsPerPage='Количество записей:'
 					rowsPerPageOptions={[5, 10, 25]}
-					component="div"
+					component='div'
 					count={users.length}
 					rowsPerPage={rowsPerPage}
 					page={page}
@@ -287,8 +287,8 @@ export function UserTable({
 				open={isDialogOpen}
 				onClose={handleCancelDelete}
 				onConfirm={handleConfirmDelete}
-				textMessage="Вы уверены, что хотите удалить пользователя?"
+				textMessage='Вы уверены, что хотите удалить пользователя?'
 			/>
 		</Box>
-	);
+	)
 }
